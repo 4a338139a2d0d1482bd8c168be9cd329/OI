@@ -1,0 +1,358 @@
+\documentclass{ctexart}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{fontspec}
+\usepackage{longtable}
+\usepackage{rotating}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{bm}
+\usepackage{CJKfntef}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{ulem}
+\usepackage{xeCJK}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{}
+\cfoot{第 \thepage\ 页  共 \pageref{LastPage} 页}
+\rfoot{}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+	\huge{NOIP模拟赛} \par
+	\vskip 1em
+	\Large{2018} \par
+	\vskip 1em
+	\large{tkandi} \par
+	\vskip 1em
+\end{center}
+\begin{table}[h]
+	\begin{center}
+		\begin{tabular}{|p{3.37cm}|p{3.37cm}|p{3.37cm}|p{3.37cm}|}
+			\hline
+			题目名称 & \texttt{naive}的瓶子 & \texttt{naive}的图 & \texttt{naive}的游戏 \\
+			\hline
+			目录 & \texttt{colour} & \texttt{graph} & \texttt{game} \\
+			\hline
+			可执行文件名 & \texttt{colour} & \texttt{graph} & \texttt{game} \\
+			\hline
+			输入文件名 & \texttt{colour.in} & \texttt{graph.in} & \texttt{game.in} \\
+			\hline
+			输出文件名 & \texttt{colour.out} & \texttt{graph.out} & \texttt{game.out} \\
+			\hline
+			每个测试点时间限制  & 2s & 2s & 5s \\
+			\hline
+			每个测试点空间限制  & 512MB & 512MB & 512MB \\
+			\hline
+			测试点数目 & 20 & 20 & 20 \\
+			\hline
+			每个测试点分值  & 5 & 5 & 5 \\
+			\hline
+			是否有部分分 & 否 & 否 & 否 \\
+			\hline
+			题目类型 & 传统型 & 传统型 & 传统型 \\
+			\hline
+			是否有附加文件 & 是 & 是 & 是 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+提交源程序文件名
+\begin{table}[h]
+	\begin{center}
+		\begin{tabular}{|p{3.37cm}|p{3.37cm}|p{3.37cm}|p{3.37cm}|}
+			\hline
+			对于\texttt{C++}语言 & \texttt{colour.cpp} & \texttt{graph.cpp} & \texttt{game.cpp} \\
+			\hline
+			对于\texttt{C}语言 & \texttt{colour.c} & \texttt{graph.c} & \texttt{game.c} \\
+			\hline
+			对于\texttt{Pascal}语言 & \texttt{colour.pas} & \texttt{graph.pas} & \texttt{game.pas} \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+编译选项
+\begin{table}[hb]
+	\begin{center}
+		\begin{tabular}{|p{3.37cm}|p{3.37cm}|p{3.37cm}|p{3.37cm}|}
+			\hline
+			对于\texttt{C++}语言 & \texttt{-O2 -lm} & \texttt{-O2 -lm} & \texttt{-O2 -lm} \\
+			\hline
+			对于\texttt{C}语言 & \texttt{-O2 -lm} & \texttt{-O2 -lm} & \texttt{-O2 -lm} \\
+			\hline
+			对于\texttt{Pascal}语言 & \texttt{-O2}    & \texttt{-O2}    & \texttt{-O2}     \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+
+
+\newpage
+
+\section{naive的瓶子(colour)}
+
+\subsection{题面描述}
+
+众所周知，小naive有$n$个瓶子，它们在桌子上排成一排。第$i$个瓶子的颜色为$c_i$，每个瓶子都有灵性，每次操作可以选择两个\textbf{相邻}的瓶子，消耗他们颜色的数值乘积的代价将其中一个瓶子的颜色变成另一个瓶子的颜色。 \par
+现在naive要让所以瓶子的颜色都一样，操作次数不限，但要使得操作的总代价最小。 \par
+
+\subsection{输入格式}
+
+输入文件为$colour.in$。 \par
+一个测试点内多组数据。 \par
+第一行，一个正整数$T$，表示数据组数。 \par
+每组数据内： \par
+第一行一个整数$n$，为瓶子的个数。 \par
+第二行共$n$个整数，第$i$个整数为第$i$个瓶子的颜色$c_i$。 \par
+
+\subsection{输出格式}
+
+输入文件为$colour.out$。 \par
+共$T$行，每行一个整数，为最小的总代价。 \par
+
+
+\subsection{样例输入}
+
+\noindent
+1 \\
+4 \\
+7 4 6 10 \\
+
+\subsection{样例输出}
+
+\noindent
+92 \\
+
+\subsection{样例解释}
+
+$\{7 \  4 \  6 \  10\} -> \{4 \  4 \  6 \  10\} -> \{4 \  4 \  4 \  10\} -> \{4 \  4 \  4 \  4\}$。 \par
+总代价为$7 \times 4 + 4 \times 6 + 4 \times 10 = 92$。 \par
+
+\subsection{数据范围与约定}
+
+$1 \le T \le 10$。 \par
+对于测试点内的每组数据： \par
+\begin{table}[h]
+	\begin{center}
+		\begin{tabular}{|p{3.37cm}|p{3.37cm}|p{3.37cm}|p{3.37cm}|}
+			\hline
+			测试点编号 & $n$ & $c_i$ & 特殊性质 \\
+			\hline
+			1, 2, 3, 4 & $\le 3$ & $\le 10^5$ & \multirow{5}*{数据保证随机生成}\\
+			\cline{1-3}
+			5, 6, 7, 8 & $\le 10$ & \multirow{2}*{$\le 4$} &  \\
+			\cline{1-2}
+			9, 10 & \multirow{4}*{$\le 300$} &  &  \\
+			\cline{1-1}
+			\cline{3-3}
+			11, 12 &  & $\le 5$ &  \\
+			\cline{1-1}
+			\cline{3-3}
+			13 - 16 &  & \multirow{2}*{$\le 10^ 5$} &  \\
+			\cline{1-1}
+			\cline{4-4}
+			17 - 20 &  &  & 无 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+数据保证：$1\le n \le 300$，$1 \le c_i \le 10^5$。 \par
+\sout{由于出(ban)题人太菜，不知道怎么造数据。} \par
+
+
+
+\newpage
+
+\section{naive的图(graph)}
+
+\subsection{题面描述}
+
+众所周知，小naive有一张$n$个点，$m$条边的带权无向图。第$i$个点的颜色为$c_i$。$d(s, t)$表示从点$s$到点$t$的权值最小的路径的权值，一条路径的权值定义为路径上权值最大的边的权值。 \par
+求所有满足$u < v, |c_u - c_v| \ge L$的点对$(u, v)$的$d(u, v)$之和。 \par
+
+\subsection{输入格式}
+
+输入文件为$graph.in$。 \par
+第一行，三个整数$n, m, L$，表示点数，边数和参数$L$。 \par
+第二行，$n$个整数，第$i$个数为第$i$个点的颜色$c_i$。
+接下来$m$行，每行三个整数$u_i, v_i, w_i$，描述了一条边。 \par
+
+\subsection{输出格式}
+
+输出文件为$graph.out$。 \par
+共一行，一个整数，表示答案。 \par
+
+\subsection{样例输入}
+
+\noindent
+4 5 2 \\
+6 4 5 2 \\
+1 2 8 \\
+2 3 7 \\
+2 4 8 \\
+1 3 2 \\
+1 4 1 \\
+
+
+\subsection{样例输出}
+
+\noindent
+17 \\
+
+
+\subsection{样例解释}
+
+满足条件的点对：$(1, 2), (1, 4), (2, 4), (3, 4)$，答案为$7 + 1 + 7 + 2 = 17$。
+
+\subsection{数据范围与约定}
+
+对于每个测试点内的数据： \par
+\begin{table}[h]
+	\begin{center}
+		\begin{tabular}{|p{3.37cm}|p{3.37cm}|p{3.37cm}|p{3.37cm}|}
+			\hline
+			测试点编号 & $n$ & $m$ & 特殊性质 \\
+			\hline
+			1, 2 & $\le 10$ & $\le 20$ & \multirow{2}*{无} \\
+			\cline{1-3}
+			3 - 6 & $\le 1000$ & $\le 2000$ &  \\
+			\hline
+			7 - 10 & \multirow{4}*{$\le 2 \times 10^5$} & \multirow{4}*{$\le 5 \times 10^5$} & $L = 0$ \\
+			\cline{1-1}
+			\cline{4-4}
+			11 - 14 &  &  & $c_i \le 50$ \\
+			\cline{1-1}
+			\cline{4-4}
+			15 - 16 &  &  & 数据保证随机生成 \\
+			\cline{1-1}
+			\cline{4-4}
+			17 - 20 &  &  & 无 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+数据保证：$1 \le n \le 2 \times 10^5$，$1 \le m \le 5 \times 10^5$，$0 \le c_i, L \le 10^9$，$1 \le u, v \le n$，$0 \le w \le 10^8$，图保证联通。 \par
+注意：可能会有重边和自环。 \par
+
+
+\newpage
+
+\section{naive的游戏(game)}
+
+\subsection{题面描述}
+
+众所周知，小naive有一个游戏。游戏地图是一个无限的一维数轴，游戏的目标是从起点$s$到终点$t$，除了起点其他每个点上都有小怪。有$n$条线段，每条线段上的相邻点之间有桥相连。 \par
+ 他有两种操作：1.走到相邻的有桥相连的点上，因为上面有小怪，所以要消耗$1$的代价；2.使用技能跳一跳，跳到距离为$L$的点上，由于把该点上的小怪踩死了，所以不消耗代价。 \par
+这个游戏有两种模式，简单和困难。 \par
+简单模式：任意点都为可停留点。 \par
+困难模式：只有在线段上出现过的点为可停留点。 \par
+不可停留点不可到达。 \par
+现求从起点到终点所消耗的最小代价。 \par
+
+
+\subsection{输入格式}
+
+输入文件为$game.in$。 \par
+一个测试点内多组数据。 \par
+第一行，一个正整数$T$，表示数据组数。 \par
+每组数据内： \par
+第一行，五个整数$type, n, L, s, t$，分别表示游戏模式，线段数，跳一跳的距离，起点坐标和终点坐标。$type = 0$表示为简单模式，$type = 1$表示为困难模式。 \par
+接下来$n$行，每行两个正整数$l_i, r_i$，表示线段$[l_i, r_i]$。 \par
+
+
+\subsection{输出格式}
+
+输出文件为$game.out$。 \par
+共$T$行，每行为该组数据的答案。若不可达输出$-1$。 \par
+
+
+\subsection{样例输入}
+
+\noindent
+4 \\
+0 3 4 1 10 \\
+1 2 \\
+5 6 \\
+7 10 \\
+1 4 5 2 20 \\
+1 2 \\
+7 8 \\
+13 14 \\
+19 20 \\
+1 3 20 1 19 \\
+1 5 \\
+10 13 \\
+19 20 \\
+0 4 20 1 5 \\
+1 4 \\
+10 12 \\
+15 15 \\
+17 20 \\
+
+\subsection{样例输出}
+
+\noindent
+1 \\
+3 \\
+-1 \\
+-1 \\
+
+\subsection{样例解释}
+
+第一个数据：最优方案之一为 1 => 5 => 9 -> 1，代价为0 + 0 + 1 = 1。 \par
+第二个数据：最优方案之一为 2 => 7 -> 8 => 13 -> 14 => 19 -> 20，代价为0 + 1 + 0 + 1 + 0 + 1 = 3。 \par
+第三个数据：从起点不可到达终点。 \par
+第四个数据：从起点不可到达终点。 \par
+（用 => 表示使用技能跳一跳， -> 表示直接走）。 \par
+
+\subsection{数据范围与约定}
+
+$1 \le T \le 10$。 \par
+对于测试点内的每组数据： \par
+\begin{table}[h]
+	\begin{center}
+		\begin{tabular}{|p{3.37cm}|p{3.37cm}|p{3.37cm}|p{3.37cm}|}
+			\hline
+			测试点编号 & $n$ & $L, l_i, r_i$ & 特殊性质 \\
+			\hline
+			1, 2 & $\le 100$ & \multirow{2}*{$\le 2 \times 10^6$} & \multirow{3}*{无} \\
+			\cline{1-2}
+			3, 4 & \multirow{2}*{$\le 1000$} &  &   \\
+			\cline{1-1}
+			\cline{3-3}
+			5, 6 &  & $\le 2 \times 10^9$ &   \\
+			\hline
+			7 & \multirow{5}*{$\le 10^5$} & \multirow{2}*{$\le 2 \times 10^6$} & $type = 0$ \\
+			\cline{1-1}
+			\cline{4-4}
+			8 &  &  & 无 \\
+			\cline{1-1}
+			\cline{3-4}
+			9, 10 &  & \multirow{3}*{$\le 2 \times 10^9$} & $type = 0$ \\
+			\cline{1-1}
+			\cline{4-4}
+			11 - 14 &  &  & 数据保证随机生成 \\
+			\cline{1-1}
+			\cline{4-4}
+			15 - 20 &  &  & 无 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+数据保证起点终点都是可停留的点，$l_i \le r_i < l_{i + 1}$。 \par
+\sout{由于出(ban)题人太菜，造不出强的数据。} \par
+
+
+\end{document}

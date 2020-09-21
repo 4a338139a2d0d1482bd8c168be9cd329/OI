@@ -1,0 +1,86 @@
+\documentclass{article}
+\usepackage{ctex}
+\usepackage{tabu}
+\usepackage{fancyhdr, ulem}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{keyval}
+\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+\usepackage{float}
+\usepackage{ifthen}
+\usepackage{calc}
+\usepackage{ifplatform}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage[all]{xy}
+\usepackage{ulem}
+\usepackage{verbatim}
+\usepackage{indentfirst}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\setenumerate[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
+\setitemize[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
+\setdescription{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{NOIP2018 Simulation}%上面左边
+\fancyhead[R]{Hany01}%上面右边
+\fancyfoot[C]{\thepage}%下面中间页码
+\renewcommand{\headrulewidth}{0.8pt}%页眉下横线宽度
+\renewcommand{\footrulewidth}{0pt}%
+\begin{document}
+    \title{NOIP2018 Simulation \\ Solution}
+    \author{Hany01}
+	\newpage
+	\maketitle
+	\sout{首先为我出题不好道歉。由于是第一次出题，可能有很多不尽人意的地方，希望大家谅解。}
+
+		\section*{逛公园}
+		我们先DFS出图的每一个环，得到环上编号最小和最大的节点，那么合法的区间一定不能同时跨过这两个点。于是我们搞出一个$R$数组，$R[i]$表示以$i$作为左端点时右端点最右可以到哪个位置。$R$数组显然是单调递增的。
+
+		对于询问$l,r$，我们二分出一个位置$i$满足$R[l\dots i-1]\le r$,$R[i\dots r]\ge r$，直接计算即可。
+
+
+		\section*{风筝}
+		改变了一个值后，序列的LIS有两种情况：
+		\begin{itemize}
+			\item 序列的LIS不包含这个位置，那么答案就是原序列的LIS或者原序列的LIS-1(取决于该位置是否为LIS方案中一定包含的点)。
+			\item 序列的LIS包含这个位置，分别从前往后、从后往前建两棵主席树即可。
+		\end{itemize}
+
+		如何判断原序列的LIS是否一定包含这个点？首先得到它在LIS中排第几个，然后统计有多少个排名与其相同，如果没有，那么一定包含。
+
+		主席树不是NOIP考点？离线+树状数组就行了。
+
+		\sout{其实这题数据范围本来是5e5，但我打gen时把范围打成4e5了又不想重造数据。。。就这样吧。}
+
+
+		\section*{种花}
+		$f_{i,j}$表示一共有$(i+j)$个元素，其中$j$个没有限制，另外$i$个被禁止放入一个位置。
+
+那么有转移：
+$$f_{0,0}=1$$
+$$f_{x,0}=(x-1)(f_{x-1,0} + f_{x-2,0})$$
+$$f_{x,y}=f_{x,y - 1} \times y + x \times f_{x - 1, y}$$
+
+考虑新加入一个没有限制的元素。如果该元素放置的位置是有限制的，那么以前有限制的元素就变成了没有限制的了，有$x$种选择方法，剩下的元素的放置方案数为$f_{x-1,y}$；如果该元素放置的位置是没有限制的，那么有$y-1$种选择方法，剩下的元素的放置方案数为$f_{x,y-1}$。
+
+
+分情况讨论：
+
+1. 若$i$在$p_j$上，$j$在$p_i$上，那么有$f_{n-2,0}$种情况。贡献为$a_1=\max(0,p_j-p_i)$。
+
+2. 若上面两个条件只满足一个，那么有$f_{n-3,1}$种情况。贡献为$a_2=\sum\limits_{k=1}^{p_j-1}k+\sum\limits_{k=1}^{n-p_i}k-2a_1$。（分别考虑$j$在$p_i$和$i$在$p_j$并减去$i,j$同时在$p_j,p_i$的情况）
+
+3. 两个条件都不满足的有$f_{n-4,2}$种情况。贡献为$\sum\limits_{k=2}^n (n-k+1)k - a_1 - a_2 - \sum\limits_{k=1}^{p_i-1}k-\sum\limits_{k=1}^{n-p_j}k+\max(0,p_i-p_j)$。
+
+所以答案为$\sum\limits_{j>i}(j-i)(a_1 f_{n-2,0} + a_2f_{n-3,1} + a_3 f_{n-4,2})$。
+
+
+\end{document}

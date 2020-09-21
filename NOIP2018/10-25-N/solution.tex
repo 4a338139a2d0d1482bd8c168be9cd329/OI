@@ -1,0 +1,178 @@
+\documentclass{ctexart}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{fontspec}
+\usepackage{longtable}
+\usepackage{rotating}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{bm}
+\usepackage{CJKfntef}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{ulem}
+\usepackage{xeCJK}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{}
+\cfoot{第 \thepage\ 页  共 \pageref{LastPage} 页}
+\rfoot{}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+	\huge{NOIP模拟赛题解} \par
+	\vskip 1em
+	\Large{2018} \par
+	\vskip 1em
+	\large{tkandi} \par
+	\vskip 1em
+\end{center}
+\begin{table}[h]
+	\begin{center}
+		\begin{tabular}{|p{3.37cm}|p{3.37cm}|p{3.37cm}|p{3.37cm}|}
+			\hline
+			题目名称 & \texttt{naive}的瓶子 & \texttt{naive}的图 & \texttt{naive}的游戏 \\
+			\hline
+			目录 & \texttt{colour} & \texttt{graph} & \texttt{game} \\
+			\hline
+			可执行文件名 & \texttt{colour} & \texttt{graph} & \texttt{game} \\
+			\hline
+			输入文件名 & \texttt{colour.in} & \texttt{graph.in} & \texttt{game.in} \\
+			\hline
+			输出文件名 & \texttt{colour.out} & \texttt{graph.out} & \texttt{game.out} \\
+			\hline
+			每个测试点时间限制  & 2s & 2s & 5s \\
+			\hline
+			每个测试点空间限制  & 512MB & 512MB & 512MB \\
+			\hline
+			测试点数目 & 20 & 20 & 20 \\
+			\hline
+			每个测试点分值  & 5 & 5 & 5 \\
+			\hline
+			是否有部分分 & 否 & 否 & 否 \\
+			\hline
+			题目类型 & 传统型 & 传统型 & 传统型 \\
+			\hline
+			是否有附加文件 & 是 & 是 & 是 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+提交源程序文件名
+\begin{table}[h]
+	\begin{center}
+		\begin{tabular}{|p{3.37cm}|p{3.37cm}|p{3.37cm}|p{3.37cm}|}
+			\hline
+			对于\texttt{C++}语言 & \texttt{colour.cpp} & \texttt{graph.cpp} & \texttt{game.cpp} \\
+			\hline
+			对于\texttt{C}语言 & \texttt{colour.c} & \texttt{graph.c}   & \texttt{game.c} \\
+			\hline
+			对于\texttt{Pascal}语言 & \texttt{colour.pas} & \texttt{graph.pas} & \texttt{game.pas}\\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+编译选项
+\begin{table}[hb]
+	\begin{center}
+		\begin{tabular}{|p{3.37cm}|p{3.37cm}|p{3.37cm}|p{3.37cm}|}
+			\hline
+			对于\texttt{C++}语言 & \texttt{-O2 -lm} & \texttt{-O2 -lm} & \texttt{-O2 -lm} \\
+			\hline
+			对于\texttt{C}语言 & \texttt{-O2 -lm} & \texttt{-O2 -lm} & \texttt{-O2 -lm} \\
+			\hline
+			对于\texttt{Pascal}语言 & \texttt{-O2}    & \texttt{-O2}    & \texttt{-O2}     \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+
+
+\newpage
+
+\section{naive的瓶子(colour)}
+
+\subsection{测试点1-8}
+
+记忆化搜索，把当前的状态用vector<int>表示，用map<vetor<int>, long long>记录到达vector<int>的最小总代价，$O(n)$枚举转移。设$m = min(n, max\{a_i\})$，时间复杂度为$O(m^n \times n^3 \times log_2{m})$。 \par
+
+\subsection{测试点9-20}
+
+首先我们可以枚举最后的颜色$sc$。\par
+可以发现，一个瓶子要么直接被染成目标颜色，要么先被染成数值比较小的颜色，再被染成目标颜色。也就是说一个瓶子颜色的数值最多变小一次。这个结论十分显然。首先我们肯定是把一些颜色不为目标颜色的数值比较大的瓶子染成数值比较小颜色，但要确保还存在目标颜色，再最后把所有其他颜色染成目标颜色。在第一步中，一个瓶子颜色的数值肯定不会变大，此外，也不会变小两次，假设他变小了两次，那么我们完全可以直接变小成第二次，这样肯定不会变劣。 \par
+所以我们就可以动态规划了，设$f_i$为把前$i$个瓶子染成目标颜色的最小代价，每次转移选择接下来的一个区间，先把他们染成这个区间中数值最小的颜色，再染成目标颜色。 \par
+但需要注意的是，在第一步中不能把所有颜色都染成非目标颜色，那么我们可以类似$f_i$的再做一遍$g_i$，为把$[i, n]$染成目标颜色的最小代价。那么最后的答案为$min\{f_{i - 1} + g_{i + 1} | c_i = sc\}$。 \par
+总的时间复杂度为$O(T \times n^3)$。 \par
+感觉这题的复杂度还可以优化，但是出题人太菜了。 \par
+
+
+
+\newpage
+
+\section{naive的序列(sequence)}
+
+\subsection{测试点1-6}
+
+模拟题意跑$n$遍Dijkstra即可，时间复杂度为$O(n m log_2{m})$。 \par
+
+\subsection{测试点7-10}
+
+可以发现原图的$d(s, t)$等于最小生成树上的$d(s, t)$。 \par
+因为$L = 0$，所以答案为所有满足$u < v$的点对$(u, v)$的$d(u, v)$之和。\par
+只有在最小生成树的边才有贡献，一条边的贡献次数为在做Kruskal时它加入时连接的两个联通块的大小的乘积。 \par
+总的时间复杂度为$O(m log_2{m})$。\par
+
+\subsection{测试点11-14}
+
+由于点的颜色种数非常少，类比$L = 0$的做法，对于每个联通块维护每种颜色的点的个数。在合并两个联通块时暴力枚举配对的颜色，然后统计答案即可。 \par
+
+\subsection{测试点15-16}
+
+我也不知道怎么做。 \par
+
+\subsection{测试点17-20}
+
+先建出Kruskal重构树，每条边的贡献次数为它连接的两个子树之间的颜色之差大于等于$L$的点对数，可以发现$\sum_{}^{}{min(size(leftchild_i), size(rightchild_i))} = O(n log_2{n})$。 \par
+对于每条边我们枚举$size$较小的那棵子树内的点，算出在另一棵子树中能与它组成点对的点的个数。这个问题实际上就是询问在dfs序的一段区间上并且颜色不在一段区间内的点数，二维数点问题可以离线树状数组完成。 \par
+总的时间复杂度为$O(mlog_2{m} + nlog^2{n})$。 \par
+
+
+\newpage
+
+\section{naive的游戏(game)}
+
+本题由两部分组成。 \par
+
+\subsection{测试点1-2}
+
+直接建图跑最短路，时间复杂度为$O(n \times range)$。 \par
+
+\subsection{测试点3-4,7-8}
+
+因为图的边权为0或1，可以跑01BFS，时间复杂度为$O(range)$。 \par
+
+\subsection{type = 0}
+
+把模$L$意义下相同的点缩成一个点，那么就成了一个环。时间复杂度为$O(n log_2{n})$。 \par
+
+\subsection{type = 1}
+
+把模$L$意义下相同的并且可达的点缩成一个点。有一个显然的结论，只有包含起点或终点或某条线段的端点的点在途中是具有决策意义的，也就是只保留这些点在图中即可。 \par
+那么点数就是$O(n)$了，如果再直接建图跑最短路，时间复杂度为$n ^ 2 log_2{n}$，可以通过测试点1-14的type = 1。（不确定能否卡掉测试点15-20的type = 1） \par
+图的边数还是可以优化成$O(n)$的，由于出题人的表述能力太差，在此就不再展开。 \par
+总的时间复杂度为$O(n log_2{n})$。 \par
+因为出题人代码能力较差，代码量和常数较大。 \par
+
+
+\end{document}
